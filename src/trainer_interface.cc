@@ -237,7 +237,18 @@ bool TrainerInterface::IsValidSentencePiece(
       // when split_by_unicode_script() is true (default = true).
       if (trainer_spec_.split_by_unicode_script() && s != kAnyType &&
           prev_script != kAnyType && prev_script != s) {
-        return false;
+        // Except combining diacritics (i.e. U_Inherited) -- they are allowed,
+        // but only when not followed by a punctuation mark
+        bool exception = false;
+        if (s == unicode_script::U_Inherited) {
+            exception = true;
+        } else if (prev_script == unicode_script::U_Inherited) {
+            exception = s != unicode_script::U_Common; 
+        }
+                           
+        if (!exception) {
+          return false;
+        }
       }
 
       prev_script = s;

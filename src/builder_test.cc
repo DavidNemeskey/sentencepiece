@@ -70,6 +70,8 @@ TEST(BuilderTest, GetPrecompiledCharsMapTest) {
     EXPECT_EQ(WS "ABC", normalizer.Normalize("ＡＢＣ"));
     EXPECT_EQ(WS "(株)", normalizer.Normalize("㈱"));
     EXPECT_EQ(WS "グーグル", normalizer.Normalize("ｸﾞｰｸﾞﾙ"));
+    // NFKD to NFKC
+    EXPECT_EQ(WS "fákat", normalizer.Normalize("fákat"));
   }
 
   {
@@ -96,6 +98,8 @@ TEST(BuilderTest, GetPrecompiledCharsMapTest) {
     EXPECT_EQ(WS "ＡＢＣ", normalizer.Normalize("ＡＢＣ"));
     EXPECT_EQ(WS "㈱", normalizer.Normalize("㈱"));
     EXPECT_EQ(WS "ｸﾞｰｸﾞﾙ", normalizer.Normalize("ｸﾞｰｸﾞﾙ"));
+    EXPECT_EQ(WS "fákat", normalizer.Normalize("fákat"));  // NFKC
+    EXPECT_EQ(WS "fákat", normalizer.Normalize("fákat"));  // NFKD
   }
 }
 
